@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>sunxiaofeng.net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- 为了此页面使用 css3 样式，所以添加下面这一行，-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var TxtType = function (el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
+
+        TxtType.prototype.tick = function () {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 200 - Math.random() * 100;
+
+            if (this.isDeleting) { delta /= 2; }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function () {
+                that.tick();
+            }, delta);
+        };
+
+        $(document).ready(function () {
+
+            $("#btn-about").click(function () {
+               
+                if (!($("#btn-about").hasClass("active"))) {
+                    $("#about").removeClass("fadeOutLeft").addClass("animated fadeInLeft");
+                    $("#contact").removeClass("fadeInLeft").addClass("fadeOutLeft");
+                    $("#btn-about").addClass("active");
+                    $("#btn-contact").removeClass("active");
+
+                    $("#about").addClass("active");
+                    $("#contact").removeClass("active");
+                }
+            });
+
+            $("#btn-contact").click(function () {
+                $("#about").removeClass("fadeInLeft").addClass("fadeOutLeft");
+                $("#contact").removeClass("fadeOutLeft").addClass("animated fadeInLeft");
+
+
+                $("#btn-contact").addClass("active");
+                $("#btn-about").removeClass("active");
+
+                $("#about").removeClass("active");
+                $("#contact").addClass("active");
+            });
+
+            $("button[id^='btn-tablet']").on('click', function (e) {
+
+
+                // prevent default anchor click behavior
+                e.preventDefault();
+
+                var hash = "#" + this.name;
+
+                // animate
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top
+                }, 300, function () {
+
+                    // when done, add hash to url
+                    // (default click behaviour)
+                    window.location.hash = hash;
+                });
+
+                $("button[id^='btn-tablet']").removeClass("active");
+                $(this).addClass("active");
+
+            });
+
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+
+            // run test on initial page load
+            checkSize();
+
+            // run test on resize of the window
+            $(window).resize(checkSize);
+
+
+        });
+
+        //Function to the css rule
+        function checkSize() {
+            if (window.matchMedia('(max-width: 992px)').matches) {
+                $("#about").removeClass("fadeOutLeft");
+                $("#contact").removeClass("fadeOutLeft");
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="layout-container">
+        <div class="layout-header">
+
+            <div class="page-header">
+                <div class="profile-image">
+                    <img src="./images/1.jpg" />
+                </div>
+                <div class="title">Sun Xiaofeng</div>
+                <div class="typewrite" data-period="2000"
+                    data-type='["Consultant", "Project Manager","Architect","System Analyst"]'>
+                    <span class="wrap"></span>
+                </div>
+            </div>
+        </div>
+        <div class="layout-main">
+            <div class="page-container">
+                <div class="page-toolbar mr-2 pt-3">
+                    <div class="toolbar btn-group-vertical">
+                        <button id="btn-about" type="button" class="btn btn-sm btn-light active py-2 shadow-none">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <img src="images/icon/user.svg" />
+                                <span>ABOUT</span>
+                            </div>
+                        </button>
+                        <!-- <button id="resume" type="button" class="btn btn-sm btn-light py-2 shadow-none">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <span class="fa fa-clipboard fa-lg" aria-hidden="true"></span>
+                                RESUME
+                            </div>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-light py-2 shadow-none">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <span class="fa fa-code fa-lg" aria-hidden="true"></span>
+                                WORKS
+                            </div>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-light py-2 shadow-none">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <span class="fa fa-commenting-o fa-lg" aria-hidden="true"></span>
+                                BLOG
+                            </div>
+                        </button> -->
+                        <button id="btn-contact" type="button" class="btn btn-sm btn-light py-2 shadow-none">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <img src="images/icon/at.svg" />
+                                CONTACT
+                            </div>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="page-profile">
+                    <div class="page-toolbar-tablet">
+
+                        <div class="toolbar btn-group-vertical">
+                            <button id="btn-tablet-about" name="about" type="button"
+                                class="btn btn-sm btn-light active py-2 shadow-none">
+                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                    <img src="images/icon/user.svg" />
+                                    <span>ABOUT</span>
+                                </div>
+                            </button>
+                            <!-- <button id="resume" type="button" class="btn btn-sm btn-light py-2 shadow-none">
+                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                    <span class="fa fa-clipboard fa-lg" aria-hidden="true"></span>
+                                    RESUME
+                                </div>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-light py-2 shadow-none">
+                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                    <span class="fa fa-code fa-lg" aria-hidden="true"></span>
+                                    WORKS
+                                </div>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-light py-2 shadow-none">
+                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                    <span class="fa fa-commenting-o fa-lg" aria-hidden="true"></span>
+                                    BLOG
+                                </div>
+                            </button> -->
+                            <button id="btn-tablet-contact" name="contact" type="button"
+                                class="btn btn-sm btn-light py-2 shadow-none">
+                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                    <img src="images/icon/at.svg" />
+                                    CONTACT
+                                </div>
+                            </button>
+                        </div>
+
+
+                    </div>
+                    <div class="profile-card rounded">
+                        <div class="profile rounded">
+                            <div class="profile-content">
+                                <div class="profile-bg"></div>
+                                <div class="profile-image">
+                                    <!-- <a href="https://sunxiaofeng.net"> -->
+                                    <img src="./images/1.jpg" />
+                                    <!-- </a> -->
+                                </div>
+                                <div class="title">孙晓枫</div>
+                                <div class="typewrite" data-period="2000"
+                                    data-type='["Consultant", "Project Manager","Architect","System Analyst"]'>
+                                    <span class="wrap"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="content-container">
+                        <div id="about" class="content animated active">
+                            <div class="content-main py-4">
+
+                                <div class="content-inner">
+                                    <div class="content-title px-4">
+                                        <span class="first-word">About</span> Me
+                                    </div>
+                                    <div class="content-row">
+                                        <div class="content-row-left">
+                                            <div style=" color:#505050;line-height:28px;">
+                                                <div style="font-weight:700;font-size:18px;">Hello! I’m Sun Xiaofeng.
+                                                </div>
+                                                <div style="font-weight:500;font-size:16px;">
+                                                    I am a consultant and software development project manager.
+                                                    I have been involved in all types of IT work throughout my career.
+                                                    Over the past few years, I have led the team to providing
+                                                    professional
+                                                    services to government organizations and top 500 companies.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="content-row-right border-line-v">
+                                            <div class="info-list">
+                                                <ul>
+                                                    <li><strong>Phone:</strong>15811055624</li>
+                                                    <li><strong>Email:</strong> sunxiaofeng@msn.com</li>
+                                                    <li><strong>Residence:</strong> China</li>
+                                                    <li><strong>Address:</strong> BeiJing, China</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="contact" class="content">
+                            <div class="content-main py-4">
+                             
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+</body>
+
+</html>
